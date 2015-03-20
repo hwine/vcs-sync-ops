@@ -1,0 +1,26 @@
+---
+- name: Prepare base box and system
+  hosts: default
+  sudo: True
+  tasks:
+    - name: attach disk
+      debug: var=hostvars[vagrant1]
+    - name: format disk
+      filesystem: >
+        dev={{ second_disk_device }}
+        fstype=ext4
+    - name: mount disk
+      mount: >
+        fstype=ext4
+        name=/opt
+        src={{ second_disk_device }}
+        state=mounted
+    - name: create user
+      user: >
+        name=vcs2vcs 
+        home=/opt/vcs2vcs
+        createhome=True
+        shell=/bin/bash
+        state=present
+    - name: disable direct login
+      command: passwd -l vcs2vcs

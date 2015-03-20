@@ -1,0 +1,18 @@
+---
+- name: Setup user account
+  hosts: default
+  remote_user: root
+  sudo: true
+  sudo_user: vcs2vcs
+  tasks:
+    - name: create venv
+      sudo: False
+      pip: >
+        virtualenv=/opt/vcs2vcs/venv
+        name={{ item }}
+      with_items:
+        - http://mercurial.selenic.com/release/mercurial-2.2.1.tar.gz
+        - dulwich==0.9.8
+        - argparse==1.2.1
+        - http://pypi.pub.build.mozilla.org/pub/hg-git-0.4.0-moz2.tar.gz
+
