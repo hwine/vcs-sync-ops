@@ -1,0 +1,49 @@
+---
+- name: Setup Legacy vcs-sync apps
+  hosts: default
+  remote_user: root
+  sudo: true
+  sudo_user: vcs2vcs
+  tasks:
+    - name: install scripts repo
+      hg: >
+        dest=~vcs2vcs/bin
+        repo=https://hg.mozilla.org/users/hwine_mozilla.com/repo-sync-tools/
+        executable=~vcs2vcs/venv/hg/bin/hg
+        force=yes
+    - name: install symlinks
+      file: src=../venv/hg/bin/{{ item }} dest=bin/{{ item }} state=link force=yes
+      with_items:
+        - hg
+        - python
+    - name: ensure our app versions used
+      shell: "echo 'PATH=$HOME/bin:$PATH' >> ~vcs2vcs/.bash_profile"
+      args:
+        creates: ~vcs2vcs/.bash_profile
+    - name: setup ssh (part 1/2)
+      file: dest=~vcs2vcs/.ssh state=directory mode=0700
+    - name: setup ssh (part 2/2)
+      copy: dest=~vcs2vcs/.ssh/config mode=0600 src=files/ssh_config
+    - name: install configs repo
+      hg: >
+        dest=~vcs2vcs/etc
+        repo=https://hg.mozilla.org/users/hwine_mozilla.com/repo-sync-configs/
+        executable=~vcs2vcs/venv/hg/bin/hg
+        force=yes
+    - name: setup other directories needed
+      file: dest=~vcs2vcs/{{ item }} state=directory 
+      with_items:
+        - logs
+        - repos
+        - staging
+    - name: forward email
+      shell: echo release+vcs2vcs@mozilla.com >~vcs2vcs/.forward
+      args:
+        creates: ~vcs2vcs/.forward
+
+    - name: setup cronjobs
+      sudo: false
+      copy: dest=/etc/cron.d/vcs2vcs.cron src=files/legacy_crontab
+    - name: setup log rotation
+      sudo: false
+      file: dest=/etc/logrotate.d/logrotate-legacy.conf src=~vcs2vcs/etc/logrotate-legacy.conf state=link

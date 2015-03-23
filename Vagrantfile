@@ -35,5 +35,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "vcs2vcs.yml"
   end
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "legacy.yml"
+  end
 
 end

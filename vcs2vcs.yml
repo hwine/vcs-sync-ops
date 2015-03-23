@@ -8,7 +8,7 @@
     - name: create venv
       sudo: False
       pip: >
-        virtualenv=/opt/vcs2vcs/venv
+        virtualenv=/opt/vcs2vcs/venv/hg
         name={{ item }}
       with_items:
         - http://mercurial.selenic.com/release/mercurial-2.2.1.tar.gz
