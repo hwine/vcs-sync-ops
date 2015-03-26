@@ -11,7 +11,6 @@ __ https://www.mozilla.org/MPL/
 Installation
 ============
 
-*tbd*
 
 Documentation
 =============
@@ -31,8 +30,15 @@ minimal dependencies:
 
 * Setuptools_ - for building the package, wheels etc. Now-days
   Setuptools is widely available, it shouldn't pose a problem :)
-* Ansible_ - for updating the documentation
+* Ansible_ - for provisioning the boxes
+* Vagrant_ - for managing the boxes. Also install vagrant-aws_ plugin
+
+install::
+
+    vagrant box add dummy https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box
 
       
 .. _Setuptools: https://pypi.python.org/pypi/setuptools
 .. _Ansible: http://docs.ansible.com/
+.. _Vagrant: https://www.vagrantup.com/
+.. _vagrant-aws: https://github.com/mitchellh/vagrant-aws

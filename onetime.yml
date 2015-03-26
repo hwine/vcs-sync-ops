@@ -1,7 +1,7 @@
 ---
 - name: Prepare base box and system
   hosts: default
-  sudo: False       # running as root
+  sudo: True       # need to run as root
   tasks:
 ##    - name: attach disk
 ##      debug: var=hostvars[vagrant1]

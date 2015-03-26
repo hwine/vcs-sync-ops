@@ -1,7 +1,7 @@
 ---
 - name: Setup Legacy vcs-sync apps
   hosts: default
-  remote_user: root
+  #remote_user: root
   sudo: true
   sudo_user: vcs2vcs
   tasks:
@@ -12,7 +12,7 @@
         executable=~vcs2vcs/venv/hg/bin/hg
         force=yes
     - name: install symlinks
-      file: src=../venv/hg/bin/{{ item }} dest=bin/{{ item }} state=link force=yes
+      file: src=../venv/hg/bin/{{ item }} dest=~vcs2vcs/bin/{{ item }} state=link force=yes
       with_items:
         - hg
         - python
@@ -42,8 +42,8 @@
         creates: ~vcs2vcs/.forward
 
     - name: setup cronjobs
-      sudo: false
+      sudo_user: root
       copy: dest=/etc/cron.d/vcs2vcs.cron src=files/legacy_crontab
     - name: setup log rotation
-      sudo: false
+      sudo_user: root
       file: dest=/etc/logrotate.d/logrotate-legacy.conf src=~vcs2vcs/etc/logrotate-legacy.conf state=link
