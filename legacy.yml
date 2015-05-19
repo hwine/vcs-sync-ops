@@ -25,12 +25,14 @@
     - name: setup ssh (part 2/2)
       copy: dest=~vcs2vcs/.ssh/config mode=0600 src=files/ssh_config
     - name: install configs repo
+      # this should go on data disk
       hg: >
         dest=~vcs2vcs/etc
         repo=https://hg.mozilla.org/users/hwine_mozilla.com/repo-sync-configs/
         executable=~vcs2vcs/venv/hg/bin/hg
         force=yes
     - name: setup other directories needed
+      # these should go on data disk
       file: dest=~vcs2vcs/{{ item }} state=directory 
       with_items:
         - logs
